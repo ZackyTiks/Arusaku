@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arusaku - Masuk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0F172A] text-slate-200 min-h-screen flex items-center justify-center px-4">
+
+    <div class="w-full max-w-md bg-[#1E293B]/50 backdrop-blur-md border border-slate-700/50 p-8 rounded-2xl shadow-2xl">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-indigo-500 tracking-tight mb-2">Arusaku</h1>
+            <p class="text-sm text-slate-400">Kelola arus dana saku dalam satu genggaman</p>
+        </div>
+
+        {% if error %}
+        <div class="mb-4 p-3 bg-red-500/20 border border-red-500/50 text-red-400 text-sm rounded-xl text-center font-medium">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="/login" method="POST" class="space-y-5">
+            <div>
+                <label for="username" class="block text-sm font-medium text-slate-300 mb-1.5">Username</label>
+                <input type="text" id="username" name="username" required autocomplete="off"
+                    class="w-full px-4 py-3 bg-[#334155]/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+                <input type="password" id="password" name="password" required
+                    class="w-full px-4 py-3 bg-[#334155]/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+            </div>
+
+            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200 mt-2">
+                Masuk ke Arusaku
+            </button>
+        </form>
+
+        <div class="text-center mt-6">
+            <p class="text-sm text-slate-400">
+                Belum memiliki akun? <a href="#" class="text-indigo-400 hover:underline font-medium">Buat Akun</a>
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>
