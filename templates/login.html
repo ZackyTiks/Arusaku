@@ -3,49 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arusaku - Masuk</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Arusaku - Login</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 100%; max-width: 400px; }
+        h2 { text-align: center; margin-bottom: 24px; color: #333; }
+        .input-group { margin-bottom: 16px; }
+        .input-group label { display: block; margin-bottom: 6px; color: #555; font-size: 14px; font-weight: 600; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        .btn-login { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; transition: 0.2s; }
+        .btn-login:hover { background-color: #0056b3; }
+        .separator { text-align: center; margin: 18px 0; position: relative; }
+        .separator::before { content: ""; display: block; width: 100%; height: 1px; background: #ddd; position: absolute; top: 50%; z-index: 1; }
+        .separator span { background: #fff; padding: 0 10px; position: relative; z-index: 2; color: #777; font-size: 13px; }
+        .btn-google { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 10px; background-color: #ffffff; border: 1px solid #dadce0; border-radius: 6px; color: #3c4043; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.2s; }
+        .btn-google:hover { background-color: #f8f9fa; }
+        .alert { padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; text-align: center; }
+        .alert.error { background-color: #f8d7da; color: #721c24; }
+        .alert.success { background-color: #d4edda; color: #155724; }
+        p.redirect-text { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
+        p.redirect-text a { color: #007bff; text-decoration: none; font-weight: bold; }
+    </style>
 </head>
-<body class="bg-[#0F172A] text-slate-200 min-h-screen flex items-center justify-center px-4">
+<body>
 
-    <div class="w-full max-w-md bg-[#1E293B]/50 backdrop-blur-md border border-slate-700/50 p-8 rounded-2xl shadow-2xl">
-        
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-extrabold text-indigo-500 tracking-tight mb-2">Arusaku</h1>
-            <p class="text-sm text-slate-400">Kelola arus dana saku dalam satu genggaman</p>
-        </div>
+<div class="card">
+    <h2>Login Arusaku</h2>
 
-        {% if error %}
-        <div class="mb-4 p-3 bg-red-500/20 border border-red-500/50 text-red-400 text-sm rounded-xl text-center font-medium">
-            {{ error }}
-        </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">{{ message }}</div>
+            {% endfor %}
         {% endif %}
+    {% endwith %}
 
-        <form action="/login" method="POST" class="space-y-5">
-            <div>
-                <label for="username" class="block text-sm font-medium text-slate-300 mb-1.5">Username</label>
-                <input type="text" id="username" name="username" required autocomplete="off"
-                    class="w-full px-4 py-3 bg-[#334155]/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
-            </div>
-
-            <div>
-                <label for="password" class="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
-                <input type="password" id="password" name="password" required
-                    class="w-full px-4 py-3 bg-[#334155]/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
-            </div>
-
-            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200 mt-2">
-                Masuk ke Arusaku
-            </button>
-        </form>
-
-        <div class="text-center mt-6">
-            <p class="text-sm text-slate-400">
-                Belum memiliki akun? <a href="#" class="text-indigo-400 hover:underline font-medium">Buat Akun</a>
-            </p>
+    <form action="/login" method="POST">
+        <div class="input-group">
+            <label for="username">Username / Email</label>
+            <input type="text" id="username" name="username" placeholder="Masukkan username atau email" required>
         </div>
 
-    </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Masukkan password" required>
+        </div>
+
+        <button type="submit" class="btn-login">Masuk</button>
+
+        <div class="separator">
+            <span>atau</span>
+        </div>
+
+        <div class="social-login">
+            <a href="/login/google" class="btn-google">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" width="18">
+                Login dengan Google
+            </a>
+        </div>
+    </form>
+
+    <p class="redirect-text">Belum punya akun? <a href="/register">Daftar di sini</a></p>
+</div>
 
 </body>
 </html>
