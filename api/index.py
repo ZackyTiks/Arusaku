@@ -105,13 +105,69 @@ def login():
 
     return render_template('login.html')
 
-# 4. MOCK ROUTE UNTUK GOOGLE LOGIN
+import os
+import requests  # <-- Pastikan sudah ada 'requests' di bagian atas file kamu
+from flask import redirect, url_for, session, flash, request
+
+# # 4. FITUR GOOGLE LOGIN (REAL ROUTE)
 @app.route('/login/google')
 def login_google():
-    return "Fitur Google OAuth sedang disiapkan! Proyek kamu harus live di Vercel dulu untuk konfigurasi API Google."
+    client_id = os.environ.get('GOOGLE_CLIENT_ID')
+    if not client_id:
+        return "Error: GOOGLE_CLIENT_ID belum disetting di Environment Variables Vercel!"
+        
+    # Alamat urutan setelah user berhasil login di Google
+    redirect_uri = "https://arusaku.vercel.app/login/google/callback"
+    scope = "openid email profile"
+    
+    # Membuat URL otomatis untuk dilempar ke halaman login Google
+    google_auth_url = (
+        f"https://accounts.google.com/o/oauth2/v2/auth?"
+        f"client_id={client_id}&"
+        f"redirect_uri={redirect_uri}&"
+        f"response_type=code&"
+        f"scope={scope}"
+    )
+    return redirect(google_auth_url)
 
-# 5. FITUR LOGOUT
-@app.route('/logout')
-def logout():
+@app.route('/login/google/callback')
+def google_callback():
+    code = request.args.get("code")
+    if not code:
+        return "Gagal mendapatkan kode otorisasi dari Google.", 400
+        
+    client_id = os.environ.get('GOOGLE_CLIENT_ID')
+    client_secret = os.environ.get('GOOGLE_CLIENT_SECRET')
+    redirect_uri = "https://arusaku.vercel.app/login/google/callback"
+    
+    # 1. Tukarkan 'code' dari Google menjadi Access Token resmi
+    token_url = "https://oauth2.googleapis.com/token"
+    token_data = {
+        "code": code,
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "redirect_uri": redirect_uri,
+        "grant_type": "authorization_code"
+    }
+    
+    token_r = requests.post(token_url, data=token_data)
+    token_json = token_r.json()
+    access_token = token_json.get("access_token")
+    
+    if not access_token:
+        return f"Gagal menukar token: {token_json}", 400
+        
+    # 2. Ambil data profil/email user menggunakan Access Token tersebut
+    userinfo_url = "https://www.googleapis.com/oauth2/v3/userinfo"
+    userinfo_r = requests.get(userinfo_url, headers={"Authorization": f"Bearer {access_token}"})
+    user_info = userinfo_r.json()
+    
+    # 3. Simpan data user ke Session Flask (tanda user sudah berhasil masuk)
+    session['logged_in'] = True
+    session['username'] = user_info.get("name")
+    session['email'] = user_info.get("email")
+    
+    flash(f"Selamat datang, {session['username']}!", "success")
+    return redirect(url_for('index'))  # Melempar user ke halaman utama (Dashboard)
     session.clear()
     return redirect(url_for('login'))
