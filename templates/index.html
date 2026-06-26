@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arusaku - Dashboard</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #f4f6f9; color: #333; }
+        nav { background-color: #ffffff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        nav h1 { font-size: 20px; color: #007bff; }
+        .logout-btn { padding: 8px 16px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: bold; }
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .welcome-box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-bottom: 20px; }
+        .welcome-box h2 { margin-bottom: 5px; }
+        .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card-stat { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .card-stat h3 { font-size: 14px; color: #666; margin-bottom: 8px; text-transform: uppercase; }
+        .card-stat p { font-size: 24px; font-weight: bold; }
+        .income { color: #28a745; }
+        .expense { color: #dc3545; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h1>Arusaku Financial</h1>
+    <a href="/logout" class="logout-btn">Keluar</a>
+</nav>
+
+<div class="container">
+    <div class="welcome-box">
+        <h2>Halo, {{ username }}! 👋</h2>
+        <p style="color: #666;">Selamat datang kembali di pencatatan keuangan pribadimu.</p>
+    </div>
+
+    <div class="finance-grid">
+        <div class="card-stat">
+            <h3>Total Pemasukan Bulan Ini</h3>
+            <p class="income">Rp 0</p>
+        </div>
+        <div class="card-stat">
+            <h3>Total Pengeluaran Bulan Ini</h3>
+            <p class="expense">Rp 0</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
